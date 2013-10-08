@@ -5,7 +5,7 @@ import paramiko
 
 HOST = "login.ifi.uio.no"
 USERNAME="peterbb"
-
+LOGIN = USERNAME + "@" + HOST
 
 def main():
     args = sys.argv[1:]
@@ -22,7 +22,7 @@ def main():
 
     send_files(files, tempfolder)
 
-    subprocess.call(["ssh", USERNAME+"@"+HOST, "print"] + args + [ tempfolder + "/*"])
+    subprocess.call(["ssh", LOGIN, "print"] + args + [ tempfolder + "/*"])
 
     client.exec_command("rm -rf " + tempfolder)
 
@@ -53,7 +53,7 @@ def send_files(files, tempfolder):
         os.symlink(os.path.abspath(f), tmp_f)
         newnames += [ tmp_f ]
 
-    subprocess.call(["scp"] + newnames + [ HOST + ":" + tempfolder])
+    subprocess.call(["scp"] + newnames + [ LOGIN + ":" + tempfolder])
     shutil.rmtree(localfolder)
 
 
